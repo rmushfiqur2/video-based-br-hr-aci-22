@@ -1,0 +1,10 @@
+certifi @ file:///croot/certifi_1671487769961/work/certifi
+einops==0.6.0
+numpy==1.24.1
+opencv-python==4.7.0.68
+Pillow==9.4.0
+scipy==1.10.0
+torch==1.13.1+cu116
+typing_extensions==4.4.0
+yapf==0.32.0
+seaborn==0.12.2
