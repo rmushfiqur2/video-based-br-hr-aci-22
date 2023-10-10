@@ -1,6 +1,6 @@
-# Contact-Free Sensing of Human Heart Rate and Canine Breath rate
+# Contact-Free Sensing of Human Heart Rate and Canine Breath Rate
 
-Can we estimate <b>canine breath rate</b> from canine videos? Or <b>human heart rate</b> from subtle skin color change of human face/hand? Using advanced computer vision techniques (optical flow, object tracking) and robust frequency estimation techniques we get the answer is "YES" for both cases.
+Can we estimate <b>canine breath rate</b> from canine videos? Or <b>human heart rate</b> from subtle skin color change of human face/hand? Using advanced computer vision techniques (optical flow, object tracking) and robust frequency estimation techniques we get the answer "YES" for both cases.
 
 This repository contains the codes used in the following paper: 
 
@@ -31,7 +31,7 @@ This repository contains the codes used in the following paper:
 ![Alt text](figs/hr_frequency_trace.png?raw=true "br_region_selection.png")
 
 ## Environments
-The requirements have been tested in python 3.8. So, run this repository with zero code change we suggest to use python 3.8 first. Use the below command to install python 3.8 in anaconda first:  
+The requirements have been tested in python 3.8. So, run this repository with zero code change we suggest using python 3.8 first. Use the below command to install python 3.8 in anaconda first:  
 ```Shell
 conda create -n "hr_br_est_aci_22" python=3.8
 conda activate hr_br_est_aci_22
@@ -40,9 +40,9 @@ pip install -r requirements.txt
 ## Usage
 There are three main front-end files in this repository.
 
-`main.py` reproduces the result presented in the [paper](https://arxiv.org/abs/2211.03636). It estimates breath rate for three video files and heart rate for four video files. The original video files are not publicly available for privacy concerns, but the intermediate files (extracted signals) are shared. `main.py` uses these results from `outputs/` directory.
+`main.py` reproduces the result presented in the [paper](https://arxiv.org/abs/2211.03636). It estimates the breath rate for three video files and the heart rate for four video files. The original video files are not publicly available for privacy concerns, but the intermediate files (extracted signals) are shared. `main.py` uses these results from `outputs/` directory.
 
-`example.ipynb` shows step-by step processes how to get breathing rate or heart rate from a sample video file. You will need to update the variable of video file path to the location of video file stored in your storage.
+`example.ipynb` shows step-by-step processes of how to get breathing rate or heart rate from a sample video file. You will need to update the variable of the video file path to the location of the video file stored in your storage.
 
 `example-multiple-traces.ipynb` reproduces the figure 9 of our [paper](https://arxiv.org/abs/2211.03636). This shows how our video-based breathing rate estimation technique can also work under the presence of another strong distracting periodic motion signal.
 
