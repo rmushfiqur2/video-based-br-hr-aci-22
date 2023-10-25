@@ -57,13 +57,13 @@ There are three main front-end files in this repository.
 
 If you use our code, please cite our paper:
 
-@inproceedings{holder2022contact,
-  &ensp;&ensp;title={Contact-free simultaneous sensing of human heart Rate and canine breathing rate for animal assisted interactions},
-  &ensp;&ensp;author={Holder, Timothy and Rahman, Mushfiqur and Summers, Emily and Roberts, David and Wong, Chau-Wai and Bozkurt, Alper},
-  &ensp;&ensp;booktitle={ACM International Conference on International Conference on Animal-Computer Interaction},
-  &ensp;&ensp;year={2022},
-  &ensp;&ensp;month={December},
-  &ensp;&ensp;address={Newcastle upon Tyne, UK}
+@inproceedings{holder2022contact,<br>
+  &ensp;&ensp;title={Contact-free simultaneous sensing of human heart Rate and canine breathing rate for animal assisted interactions},<br>
+  &ensp;&ensp;author={Holder, Timothy and Rahman, Mushfiqur and Summers, Emily and Roberts, David and Wong, Chau-Wai and Bozkurt, Alper},<br>
+  &ensp;&ensp;booktitle={ACM International Conference on International Conference on Animal-Computer Interaction},<br>
+  &ensp;&ensp;year={2022},<br>
+  &ensp;&ensp;month={December},<br>
+  &ensp;&ensp;address={Newcastle upon Tyne, UK}<br>
 }
 
 ## Acknowledgment
