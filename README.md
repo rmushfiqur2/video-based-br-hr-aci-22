@@ -1,6 +1,6 @@
-# Contact-Free Sensing of Human Heart Rate and Canine Breath Rate
+# Contact-Free Sensing of Human Heart Rate and Canine Breathing Rate
 
-Can we estimate <b>canine breath rate</b> from canine videos? Or <b>human heart rate</b> from subtle skin color change of human face/hand? Using advanced computer vision techniques (optical flow, object tracking) and robust frequency estimation techniques we get the answer "YES" for both cases.
+Can we estimate <b>canine breathing rate</b> from canine videos? Or <b>human heart rate</b> from subtle skin color change of human face/hand? Using advanced computer vision techniques (optical flow, object tracking) and robust frequency estimation techniques we get the answer "YES" for both cases.
 
 This repository contains the codes used in the following paper: 
 
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 ## Usage
 There are three main front-end files in this repository.
 
-`main.py` reproduces the result presented in the [paper](https://arxiv.org/abs/2211.03636). It estimates the breath rate for three video files and the heart rate for four video files. The original video files are not publicly available for privacy concerns, but the intermediate files (extracted signals) are shared. `main.py` uses these results from `outputs/` directory.
+`main.py` reproduces the result presented in the [paper](https://arxiv.org/abs/2211.03636). It estimates the breathing rate for three video files and the heart rate for four video files. The original video files are not publicly available for privacy concerns, but the intermediate files (extracted signals) are shared. `main.py` uses these results from `outputs/` directory.
 
 `example.ipynb` shows step-by-step processes of how to get breathing rate or heart rate from a sample video file. You will need to update the variable of the video file path to the location of the video file stored in your storage.
 
@@ -57,14 +57,16 @@ There are three main front-end files in this repository.
 
 If you use our code, please cite our paper:
 
-@article{holder2022contact,<br>
-  &ensp;&ensp;title={Contact-Free Simultaneous Sensing of Human Heart Rate and Canine Breathing Rate for Animal Assisted Interactions},<br>
-  &ensp;&ensp;author={Holder, Timothy and Rahman, Mushfiqur and Summers, Emily and Roberts, David and Wong, Chau-Wai and Bozkurt, Alper},<br>
-  &ensp;&ensp;journal={arXiv preprint arXiv:2211.03636},<br>
-  &ensp;&ensp;year={2022}<br>
+@inproceedings{holder2022contact,
+  &ensp;&ensp;title={Contact-free simultaneous sensing of human heart Rate and canine breathing rate for animal assisted interactions},
+  &ensp;&ensp;author={Holder, Timothy and Rahman, Mushfiqur and Summers, Emily and Roberts, David and Wong, Chau-Wai and Bozkurt, Alper},
+  &ensp;&ensp;booktitle={ACM International Conference on International Conference on Animal-Computer Interaction},
+  &ensp;&ensp;year={2022},
+  &ensp;&ensp;month={December},
+  &ensp;&ensp;address={Newcastle upon Tyne, UK}
 }
 
-## Acknowledgement
+## Acknowledgment
 1. [Global Motion Aggregation](https://github.com/zacjiang/GMA)
 2. [Adaptive Multi-Trace Carving for Robust Frequency
 Tracking in Forensic Applications](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9220114)
