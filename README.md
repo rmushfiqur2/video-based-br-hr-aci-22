@@ -37,6 +37,13 @@ conda create -n "hr_br_est_aci_22" python=3.8
 conda activate hr_br_est_aci_22
 pip install -r requirements.txt
 ```
+
+## Important Suggestion
+
+If you ever see a matpotlib image to pop up and you want to close the window, do not use mouse to close it. Press 'Q' on keyboard to quit the image.
+
+In this repository you can control whether you want to display the images by setting `verbose` argument True or False.
+
 ## Usage
 There are three main front-end files in this repository.
 

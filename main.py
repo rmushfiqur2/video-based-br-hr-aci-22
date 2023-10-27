@@ -28,7 +28,7 @@ def quick_peep(info):
                   info["crop"][2]:info["crop"][3]]
     img = cv2.resize(img, (0, 0), fx=info["fx"], fy=info["fy"])
 
-    img = cv2.rectangle(img, (20, 0),(200, 200), (0, 0, 0),-1)  # hide face for 'face002'
+    #img = cv2.rectangle(img, (20, 0),(200, 200), (0, 0, 0),-1)  # hide face for 'face002'
     #img = cv2.rectangle(img, (500, 0),(700, 200), (0, 0, 0),-1)  # hide face for 'dog006'
     #img = cv2.rectangle(img, (380, 0),(550, 150), (0, 0, 0),-1)  # hide face for 'dog003'
     img = cv2.rectangle(img, (info["boxes"][0][0], info["boxes"][0][2]),
@@ -76,7 +76,7 @@ def get_br(vid_id, collection_id, data_folder, verbose=True, GT_folder=None):
                       ylabel='Displacement (pixel)')
         plt.show()
 
-    specgrm_png, _, est_br, _, _, _ = amtc_freq_from_signal(
+    specgrm_png, est_time, est_br, _, _, _ = amtc_freq_from_signal(
         sig_clipped,
         info["fps"], [15, 80],
         window_length_in_sec=10,
@@ -92,8 +92,9 @@ def get_br(vid_id, collection_id, data_folder, verbose=True, GT_folder=None):
         plt.imshow(
             specgrm_png
         )  # camera estimated spectrogram with overlaying breath rate trace
+        plt.show()
 
-    if GT_folder is not None:
+    if GT_folder is not None and os.path.exists(GT_folder + vid_id + '_result.npy'):
         human_recorded_gt = np.load(GT_folder + vid_id + '_result.npy')
         # GT breath rate signal and camera estimated br signal may not start at exactly same point
         # find_matching_time function below uses maximum cross-correlation to sync the starting
@@ -121,8 +122,8 @@ def get_br(vid_id, collection_id, data_folder, verbose=True, GT_folder=None):
         err = est_br - ref_br
         err_per = err / ref_br
 
-        return err, err_per
-    return [-1], [-1]  # no ground truth, so error unknown
+        return est_time, est_br, err, err_per
+    return est_time, est_br, [-1], [-1]  # no ground truth, so error unknown
 
 
 def get_hr(vid_id, collection_id, data_folder, verbose=True, GT_folder=None):
@@ -177,8 +178,9 @@ def get_hr(vid_id, collection_id, data_folder, verbose=True, GT_folder=None):
         plt.imshow(
             specgrm_png
         )  # camera estimated spectrogram with overlaying breath rate trace
+        plt.show()
 
-    if GT_folder is not None:
+    if GT_folder is not None and os.path.exists(GT_folder + 'human_hr(e4)_' + vid_id + '.npy'):
         hr_human_e4 = np.load(GT_folder + 'human_hr(e4)_' + vid_id + '.npy')
         if verbose:
             # plot GT hr and estimated hr on same figure
@@ -203,8 +205,8 @@ def get_hr(vid_id, collection_id, data_folder, verbose=True, GT_folder=None):
         err = est_hr - ref_hr
         err_per = err / ref_hr
 
-        return err, err_per
-    return [-1], [-1]  # no ground truth, so error unknown
+        return est_time, est_hr, err, err_per
+    return est_time, est_hr, [-1], [-1]  # no ground truth, so error unknown
 
 
 def get_and_print_results(video_set, collection_set, br_or_hr, verbose=True):
@@ -216,13 +218,13 @@ def get_and_print_results(video_set, collection_set, br_or_hr, verbose=True):
     for vid_id in video_set:
         for collection_id in collection_set:
             if br_or_hr=='br':
-                err, err_per = get_br(vid_id,
+                _, _, err, err_per = get_br(vid_id,
                                       collection_id,
                                       data_folder=signal_collection_folder,
                                       verbose=verbose,
                                       GT_folder='GT/')
             elif br_or_hr=='hr':
-                err, err_per = get_hr(vid_id,
+                _, _, err, err_per = get_hr(vid_id,
                                       collection_id,
                                       data_folder=signal_collection_folder,
                                       verbose=verbose,

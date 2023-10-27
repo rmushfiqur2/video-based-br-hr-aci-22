@@ -491,20 +491,21 @@ class Annotate(object):
         #return [self.x0, self.x1, self.y0, self.y1]
 
 
-def laod_box_info(set_id, vid, record):
+def laod_box_info(set_id, vid, record, wet_run=False):
     box_info = {}
     filename = 'outputs/' + record + '_' + vid + '.json'
     if os.path.exists(filename):
         with open(filename, 'r') as fp:
             box_info = json.load(fp)
     if str(set_id) in box_info.keys():
-        if input(
+        if not wet_run and input(
                 "replace previously drawn boxes for current set? (y/n)") == 'y':
             return box_info, None
         else:
             print("Restoring previously drawn boxes .. ")
             return box_info, box_info[str(set_id)]["boxes"]
     else:
+        assert not wet_run
         return box_info, None
 
 
@@ -530,10 +531,13 @@ def collect_signals(vid,
                     set_id=0,
                     fx=1.0,
                     fy=1.0,
+                    dry_run=False,
+                    wet_run=False,
                     output_folder='outputs/'):
     img_grid = False if apply_mv else True
 
-    boxes_info, current_box_set = laod_box_info(set_id, vid, record)
+
+    boxes_info, current_box_set = laod_box_info(set_id, vid, record, wet_run=wet_run)
     print(current_box_set)
     boxes = current_box_set
     if boxes is not None:
@@ -541,6 +545,7 @@ def collect_signals(vid,
     matplotObj = None
     img = None
     #if record == 'rgb':
+    assert os.path.exists(vid_path)
     cap = cv2.VideoCapture(vid_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
     start_at = int(start_sec * fps)
@@ -557,8 +562,12 @@ def collect_signals(vid,
 
     cap.set(cv2.CAP_PROP_POS_FRAMES,
             1 + start_at)  # we get flow file from 2nsd frame
-
-    for flo in sorted(os.listdir(flo_path))[start_at:end_at]:
+    if dry_run:
+        flo_path = 'motion_vector/'
+        loop_through = ['sample_of_file.flo']
+    else:
+        loop_through = sorted(os.listdir(flo_path))[start_at:end_at]
+    for flo in loop_through:
         #if record == 'rgb':
         ret, img = cap.read()
         if not ret:
@@ -568,7 +577,7 @@ def collect_signals(vid,
         if crop is not None:
             img = img[crop[0]:crop[1], crop[2]:crop[3]]
         img = cv2.resize(img, (0, 0), fx=fx, fy=fy)
-        img = cv2.rectangle(img, (20, 0), (200, 200), (0, 0, 0), -1) # hide face for 'face002'
+        #img = cv2.rectangle(img, (20, 0), (200, 200), (0, 0, 0), -1) # hide face for 'face002'
         #img = cv2.rectangle(img, (500, 0), (700, 200), (0, 0, 0), -1) # hide face for 'dog006'
 
         if crop is not None:
@@ -586,7 +595,7 @@ def collect_signals(vid,
                                   calc_res=calc_res,
                                   vis_radius=radius,
                                   first_frame=img,
-                                  plot_signal=graph_on,
+                                  plot_signal=graph_on and not dry_run,
                                   rect_move=rect_move,
                                   crop=None,
                                   record=record,
@@ -595,6 +604,7 @@ def collect_signals(vid,
                 matplotObj.restore_boxes(boxes)
                 plt.pause(0.001)
             else:
+                assert not wet_run
                 print(
                     'Draw the rectangular box on the figure labelled as original video'
                 )
@@ -608,19 +618,26 @@ def collect_signals(vid,
                 'press q to stop the process.. you can still save the unfinished result'
             )
         else:
-            matplotObj.update_data(os.path.join(flo_path, flo), frame=img)
+            if not dry_run:
+                matplotObj.update_data(os.path.join(flo_path, flo), frame=img)
         plt.draw()
 
         if matplotObj.rect_drawn < matplotObj.num_patch:
             while matplotObj.rect_drawn < matplotObj.num_patch:
                 plt.pause(1)
-            matplotObj.update_data(os.path.join(flo_path, flo), frame=img)
+            if not dry_run:
+                matplotObj.update_data(os.path.join(flo_path, flo), frame=img)
+            else:
+                plt.pause(2)
+                break
         mypause(0.001)
+        if dry_run:
+            plt.pause(2)
         if not plt.get_fignums():  # 'press q to exit (handled by matplotlib)'
             break
     plt.close()
 
-    if input("store the signal values ?") == 'y':
+    if dry_run or wet_run or input("store the signal values ?") == 'y':
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
 
@@ -641,7 +658,10 @@ def collect_signals(vid,
         if record == 'displacement':
             data_u = np.array(matplotObj.signal_u, dtype=np.float32)
             data_v = np.array(matplotObj.signal_v, dtype=np.float32)
-            data = np.concatenate((data_u, data_v), axis=1)
+            if not dry_run:
+                data = np.concatenate((data_u, data_v), axis=1)
+            else:
+                data = data_v
             np.save(output_folder + 'displacement_' + vid + '_' + str(set_id) + '.npy',
                     data)
             with open(output_folder + 'displacement_' + vid + '.json', 'w') as fp:
